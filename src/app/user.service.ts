@@ -25,7 +25,7 @@ newAccount(email, password, firstName, lastName){
 
   user.then(u => {
     var newUser = new User(firstName, lastName);
-    this.userTable.child('user.uid').set(newUser);
+    this.userTable.child(u.uid).set(newUser);
   })
 
 }
@@ -33,6 +33,7 @@ newAccount(email, password, firstName, lastName){
 deleteUser() {
   if (confirm("Are you sure you want to delete your account?")){
     this.auth.currentUser.delete();
+    this.listOfUsers.remove(this.auth.currentUser.uid);
   } else {
     alert("That was a close one...");
   }
@@ -48,6 +49,10 @@ logIn(email, password){
 
 getAllUsers() {
   return this.listOfUsers;
+}
+
+getCurrentUser(){
+  return this.db.object('users/' + this.auth.currentUser.uid);
 }
 
 

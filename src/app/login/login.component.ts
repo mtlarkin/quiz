@@ -8,13 +8,25 @@ import { UserService } from '../user.service';
   providers: [UserService]
 })
 export class LoginComponent implements OnInit {
-
+  activeUser;
   constructor(public userService: UserService) { }
 
   ngOnInit() {
   }
 
-logIn(email, password){
+signIn(email, password){
   this.userService.logIn(email, password);
+  this.getUser();
+}
+
+createAccount(email, password, firstName, lastName) {
+  this.userService.newAccount(email, password, firstName, lastName);
+  this.getUser();
+}
+
+getUser() {
+  this.userService.getCurrentUser().subscribe( user => {
+    this.activeUser = user;
+  });
 }
 }
