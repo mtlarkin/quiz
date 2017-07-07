@@ -1,3 +1,25 @@
-<p>
-  login works!
-</p>
+<div class="">
+  <h1>Sign in!</h1>
+</div>
+
+<div class="">
+  <div class="">
+    <input type="email" [(ngModel)]="email" name="email" placeholder="Email Address">
+    <input type="password" [(ngModel)]="password" name="password" placeholder="Password">
+
+    <div class="" *ngIf="!createNewAccount">
+      <button type="button" (click)="signIn(email, password)">Log In</button>
+      <button type="button" (click)="createNewAccount = true">Create Account</button>
+    </div>
+  </div>
+  <div class="" *ngIf="createNewAccount">
+    <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
+    <input type="password" [(ngModel)]="firstName" name="firstName" placeholder="First Name">
+    <input type="password" [(ngModel)]="lastName" name="lastName" placeholder="Last Name">
+    <button type="button" (click)="createNewAccount = false; confirmPassword = ''; firstName = ''; lastName = '';">Cancel</button>
+    <button type="button" (click)="createAccount(email, password, firstName, lastName)">Create Account</button>
+  </div>
+
+
+
+</div>
