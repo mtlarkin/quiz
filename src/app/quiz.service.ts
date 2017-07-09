@@ -30,51 +30,61 @@ export class QuizService {
   }
 
   generateQuizzes(){
-    // var week = 1;
-    // var day = 1;
-    //
-    // var userObject = firebase.database().ref('users/' + this.auth.currentUser.uid);
+    var userObject = firebase.database().ref('users/' + this.auth.currentUser.uid);
 
     var questionList = this.listOfQuestions.subscribe( list => {
       return questionList = list;
     });
     //wait for questionList to populate and iterate through each to create objects
-    var tempQuiz = new Quiz(false);
-    var quizArray: Array<any> = [];
-    quizArray[0] = ["a", tempQuiz];
     setTimeout(x =>{
+      var tempQuiz = new Quiz(false);
+      var quizArray: Array<any> = [];
+      // quizArray[0] = ["a", tempQuiz];
+      var keyArray =[];
+
       for (var question of questionList) {
-        console.log(question);
+
+        //Create the key to be used to validate whether or not a quiz already exists
         var key = this.createQuizKey(question.week, question.day);
-        for (var i=0; i < quizArray.length; i++) {
 
 
-          if ( quizArray[i][0] != key){
+          if ( !keyArray.includes(key) ) {
 
+            keyArray.push(key);
 
             var newQuiz = new Quiz(false);
             this.addQuestionKey(newQuiz, question.$key);
             var tempArray = this.createTempArray(key, newQuiz);
-            return quizArray.push(tempArray);
+            quizArray.push(tempArray);
 
 
-            } else {
-            return this.addQuestionKey(quizArray[i][1], question.$key);
+
+
+
+          } else {
+            for ( var i = 0; i < quizArray.length; i++) {
+              if (quizArray[i][0] === key)
+              this.addQuestionKey(quizArray[i][1], question.$key);
+            }
+
+
 
 
           }
 
-        }
+      }
+      console.log(quizArray);
 
+      for ( var idQuizpair in quizArray) {
+
+        userObject.child(idQuizpair[0]).set(idQuizpair[1]);
 
       }
-
-      console.log(quizArray);
 
     },1500);
 
 
-    // userObject.child(quizkey).set(newQuiz);
+
 
 
 
