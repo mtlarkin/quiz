@@ -1,7 +1,7 @@
 export class Question {
 public constructor(
-  public id: string,
   public week: number,
+  public day: number,
   public topic: string,
   public question: string,
   public correct: string,

@@ -1,0 +1,20 @@
+
+<label for="week">week</label><br><input type="text" name="week" [(ngModel)]="week" placeholder="What week is this question discussed?"><hr>
+<label for="day">day</label><br><input type="text" name="day" [(ngModel)]="day" placeholder="Which day of the week is this question discussed? (1 - 5)"><hr>
+<label for="topic">topic</label><br><input type="text" name="topic" [(ngModel)]="topic" placeholder="What is the topic of the question?"><hr>
+<label for="question">question</label><br><input type="text" name="question" [(ngModel)]="question" placeholder="What is the question?"><hr>
+<label for="correct">correct</label><br><input type="text" name="correct" [(ngModel)]="correct" placeholder="What is the correct answer?"><hr>
+<label for="wrong1">wrong1</label><br><input type="text" name="wrong1" [(ngModel)]="wrong1" placeholder="What is a wrong answer?"><hr>
+<label for="wrong2">wrong2</label><br><input type="text" name="wrong2" [(ngModel)]="wrong2" placeholder="What is another wrong answer?"><hr>
+<button type="button" (click)="saveQuestion(week, day, topic, question, correct, wrong1, wrong2)">Save the question!</button>
+<div *ngIf="addedQuestion">
+  <ol>Result
+    <li>week: {{addedQuestion.week}}</li>
+    <li>day: {{addedQuestion.day}}</li>
+    <li>topic: {{addedQuestion.topic}}</li>
+    <li>question: {{addedQuestion.question}}</li>
+    <li>correct: {{addedQuestion.correct}}</li>
+    <li>wrong1: {{addedQuestion.wrong1}}</li>
+    <li>wrong2: {{addedQuestion.wrong2}}</li>
+  </ol>
+</div>
