@@ -20,40 +20,42 @@ export class UserService {
     this.userTable = firebase.database().ref('users');
   }
 
-newAccount(email, password, firstName, lastName){
-  var user = this.auth.createUserWithEmailAndPassword(email, password);
+  newAccount(email, password, firstName, lastName){
+    var user:(firebase.Promise<any>|firebase.Thenable<any>) = this.auth.createUserWithEmailAndPassword(email, password);
+    setTimeout(()=>{
 
-  user.then(u => {
-    var newUser = new User(firstName, lastName);
-    this.userTable.child(u.uid).set(newUser);
-  })
-
-}
-
-deleteUser() {
-  if (confirm("Are you sure you want to delete your account?")){
-    this.auth.currentUser.delete();
-    this.listOfUsers.remove(this.auth.currentUser.uid);
-  } else {
-    alert("That was a close one...");
+      user.then(u => {
+        var newUser = new User(firstName, lastName);
+        this.userTable.child(u.uid).set(newUser);
+      })
+    }, 100);
+    return user;
   }
-}
 
-logOut(){
-  this.auth.signOut()
-}
+  deleteUser() {
+    if (confirm("Are you sure you want to delete your account?")){
+      this.auth.currentUser.delete();
+      this.listOfUsers.remove(this.auth.currentUser.uid);
+    } else {
+      alert("That was a close one...");
+    }
+  }
 
-logIn(email, password){
-  this.auth.signInWithEmailAndPassword(email, password);
-}
+  logOut(){
+    this.auth.signOut()
+  }
 
-getAllUsers() {
-  return this.listOfUsers;
-}
+  logIn(email, password){
+    this.auth.signInWithEmailAndPassword(email, password);
+  }
 
-getCurrentUser(){
-  return this.db.object('users/' + this.auth.currentUser.uid);
-}
+  getAllUsers() {
+    return this.listOfUsers;
+  }
+
+  getCurrentUser(){
+    return this.db.object('users/' + this.auth.currentUser.uid);
+  }
 
 
 

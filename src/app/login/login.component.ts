@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
+import { QuizService } from '../quiz.service';
 
 @Component({
   selector: 'app-login',
@@ -9,24 +10,46 @@ import { UserService } from '../user.service';
 })
 export class LoginComponent implements OnInit {
   activeUser;
-  constructor(public userService: UserService) { }
+  uid;
+  constructor(public userService: UserService, public quizService: QuizService) { }
 
   ngOnInit() {
+
   }
 
-signIn(email, password){
-  this.userService.logIn(email, password);
-  this.getUser();
-}
+  signIn(email, password){
+    this.userService.logIn(email, password);
+    this.getUser();
+  }
 
-createAccount(email, password, firstName, lastName) {
-  this.userService.newAccount(email, password, firstName, lastName);
-  this.getUser();
-}
+  log() {
+    this.userService.logOut();
+  }
 
-getUser() {
-  this.userService.getCurrentUser().subscribe( user => {
-    this.activeUser = user;
-  });
-}
+  createAccount(email, password, firstName, lastName) {
+
+    var user = this.userService.newAccount(email, password, firstName, lastName);
+    user.then( usr => {
+      return this.uid = usr.uid;
+    })
+
+
+    setTimeout(x => {
+      this.getUser();
+      console.log('login = ' + this.activeUser);
+
+      this.quizService.generateQuizzes(this.uid);
+    },1000);
+  }
+
+  getUser() {
+    this.userService.getCurrentUser().subscribe( user => {
+      return this.activeUser = user;
+    });
+  }
+
+
+
+
+
 }

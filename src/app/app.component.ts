@@ -14,7 +14,5 @@ export class AppComponent {
 
   }
 
-  test(){
-    this.quizService.generateQuizzes();
-  }
+ 
 }
