@@ -113,7 +113,7 @@ export class QuizService {
   addQuestionKey(targetQuiz:Quiz, key) {
     //generate a human-readable key for firebase
     //ex. 'question-3'
-    var quizQuestionNumber = "question-" + Object.keys(targetQuiz).length;
+    var quizQuestionNumber = "question" + Object.keys(targetQuiz).length;
     //quiz question hold the firebase id of a 'question' and stores it here for use with 'findById' method
     var newQuizQuestion = new QuizQuestion(key);
     // takes the inputted Quiz and gives it a new key|value pair
@@ -165,11 +165,32 @@ export class QuizService {
   }
 
   startSelectedQuiz(userKey, quizKey) {
+
+    var questionTitleArray:Array<string> = [];
+    var questionKeyArray:Array<string> = [];
+
     var foundQuiz = this.db.object('users/' + userKey + '/quizzes/' + quizKey);
+
     var quizAfterSubscribe;
     foundQuiz.subscribe( quiz => {
       quizAfterSubscribe = quiz;
-    })
-    return quizAfterSubscribe;
+    });
+
+    for ( var question in quizAfterSubscribe){
+      if (question === "complete"){
+        //Do nothing
+      } else {
+        questionTitleArray.push(question);
+        var tempQuestion = this.db.object('users/' + userKey + '/quizzes/' + quizKey + '/' + question);
+        tempQuestion.subscribe(q => {
+          questionKeyArray.push(q.id);
+        })
+      }
+    }
+    return questionKeyArray;
+  }
+
+  getQuestionByKey(key){
+    return this.db.object('questions/' + key);
   }
 }
