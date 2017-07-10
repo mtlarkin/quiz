@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, OnInit } from '@angular/core';
 import { QuizService } from './quiz.service';
 
 
@@ -6,13 +6,15 @@ import { QuizService } from './quiz.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [ QuizService ]
+  providers: [ QuizService ],
+  inputs: ['user']
 })
 export class AppComponent {
-  title = 'app';
+
+
   public constructor(public quizService: QuizService){
 
   }
 
- 
+
 }

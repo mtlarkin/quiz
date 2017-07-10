@@ -42,7 +42,7 @@ export class UserService {
   }
 
   logOut(){
-    this.auth.signOut()
+    this.auth.signOut();
   }
 
   logIn(email, password){
@@ -57,6 +57,7 @@ export class UserService {
     return this.db.object('users/' + this.auth.currentUser.uid);
   }
 
+  
 
 
 

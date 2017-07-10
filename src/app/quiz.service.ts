@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 //Firebase Imports
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
@@ -153,5 +153,23 @@ export class QuizService {
     }
 
     return array;
+  }
+
+  getCurrentUserQuizList(){
+    var quizList =  this.db.list('users/' + this.auth.currentUser.uid + '/quizzes');
+    var quizzesAfterSubscribe;
+    quizList.subscribe(quizzes => {
+      quizzesAfterSubscribe = quizzes;
+    })
+    return quizzesAfterSubscribe;
+  }
+
+  startSelectedQuiz(userKey, quizKey) {
+    var foundQuiz = this.db.object('users/' + userKey + '/quizzes/' + quizKey);
+    var quizAfterSubscribe;
+    foundQuiz.subscribe( quiz => {
+      quizAfterSubscribe = quiz;
+    })
+    return quizAfterSubscribe;
   }
 }

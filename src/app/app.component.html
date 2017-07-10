@@ -1,3 +1,4 @@
 <h1>ROOT_DIRECTORY</h1>
-<app-login></app-login>
-    <button type="button" name="button" (click)="test()">TEST ME</button>
+<app-login (userRetrieved)="user = $event" *ngIf="!activeUser"></app-login>
+
+<app-quiz-view [userFromAppView]="user" *ngIf="user"></app-quiz-view>
