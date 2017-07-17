@@ -13,6 +13,7 @@ export class UserService {
   auth: firebase.auth.Auth;
   userTable: firebase.database.Reference;
   listOfUsers: FirebaseListObservable<any>;
+  userObject;
 
   constructor(public afAuth: AngularFireAuth, public db: AngularFireDatabase) {
     this.auth = afAuth.auth;
@@ -26,7 +27,7 @@ export class UserService {
 
       user.then(u => {
         var newUser = new User(firstName, lastName);
-        this.userTable.child(u.uid).set(newUser);
+        this.userTable.child(this.getCurrentUser()).set(newUser);
       })
     }, 100);
     return user;
@@ -46,7 +47,7 @@ export class UserService {
   }
 
   logIn(email, password) {
-    this.auth.signInWithEmailAndPassword(email, password);
+    return this.auth.signInWithEmailAndPassword(email, password);
   }
 
   getAllUsers() {
@@ -55,6 +56,15 @@ export class UserService {
 
   getCurrentUser() {
     return this.auth.currentUser.uid;
+  }
+
+  getUserById() {
+    var userObject;
+    var user = this.db.object('users/' + this.auth.currentUser.uid).subscribe(usr => {
+      userObject = usr;
+  });
+  console.log(userObject);
+    return userObject;
   }
 
 

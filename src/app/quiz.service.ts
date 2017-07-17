@@ -162,8 +162,8 @@ export class QuizService {
     return array;
   }
 
-  getCurrentUserQuizList() {
-    this.listOfQuizzes = this.db.list('users/' + this.auth.currentUser.uid + '/quizzes');
+  getCurrentUserQuizList(userKey) {
+    this.listOfQuizzes = this.db.list('users/' + userKey + '/quizzes');
     return this.listOfQuizzes;
 
   }
@@ -201,7 +201,9 @@ export class QuizService {
   updateQuestionAnswerAndScore(quizKey: string, result: Array<QuizQuestion>) {
     var user = this.auth.currentUser.uid;
     var foundQuiz = this.db.object('users/' + user + '/quizzes/' + quizKey);
-
+    var numberOfQuestions = result.length;
+    var correctAnswers: number = 0;
+    
     var quizAfterSubscribe: Object;
 
     foundQuiz.subscribe(quiz => {
@@ -225,6 +227,12 @@ export class QuizService {
 
           for (var i = 0; i < result.length; i++) {
 
+            if (result[i].correct === true) {
+              console.log(result[i].correct)
+             return correctAnswers++;
+            }
+
+
             if (q.id === result[i].id) {
               firebase.database().ref('users/' + user + '/quizzes/' + quizKey).child(question).set(result[i]);
               return;
@@ -233,5 +241,8 @@ export class QuizService {
         });
       }
     }
+    var quizScore = correctAnswers / numberOfQuestions;
+    console.log(quizScore);
+    firebase.database().ref('users/' + user + '/quizzes/' + quizKey).child("score").set(quizScore)
   }
 }

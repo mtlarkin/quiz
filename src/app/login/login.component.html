@@ -1,23 +1,20 @@
-<div class="">
-  <h1>Sign in!</h1>
-  <h1 *ngIf="activeUser">{{activeUser.$key}}</h1>
-  <h1 *ngIf="activeUser">{{activeUser.firstName}} {{activeUser.lastName}}</h1>
-</div>
+<div *ngIf="!activeUserId" class="">
+  <div class="container-fluid">
 
-<div *ngIf="!activeUser" class="">
-  <div class="">
-    <input type="email" [(ngModel)]="email" name="email" placeholder="Email Address">
-    <input type="password" [(ngModel)]="password" name="password" placeholder="Password">
-
-    <div class="" *ngIf="!createNewAccount">
-      <button type="button" (click)="signIn(email, password)">Log In</button>
-      <button type="button" (click)="createNewAccount = true">Create Account</button>
+    <div class="container-fluid form-group" *ngIf="!createNewAccount">
+      <h1>Login</h1>
+    <input class="form-control" type="email" [(ngModel)]="email" name="email" placeholder="Email Address">
+    <input class="form-control" type="password" [(ngModel)]="password" name="password" placeholder="Password">
+      <button type="button" (click)="signIn(email, password)" class="btn btn-success">Log In</button>
+      <button type="button" (click)="createNewAccount = true" class="btn btn-default">Create Account</button>
     </div>
   </div>
-  <div class="" *ngIf="createNewAccount">
-    <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
-    <input type="text" [(ngModel)]="firstName" name="firstName" placeholder="First Name">
-    <input type="text" [(ngModel)]="lastName" name="lastName" placeholder="Last Name">
+  <div class="container-fluid form-group" *ngIf="createNewAccount">
+    <input class="form-control" type="email" [(ngModel)]="email" name="email" placeholder="Email Address">
+    <input class="form-control" type="password" [(ngModel)]="password" name="password" placeholder="Password">
+    <input class="form-control" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
+    <input class="form-control" type="text" [(ngModel)]="firstName" name="firstName" placeholder="First Name">
+    <input class="form-control" type="text" [(ngModel)]="lastName" name="lastName" placeholder="Last Name">
     <button type="button" (click)="createNewAccount = false; confirmPassword = ''; firstName = ''; lastName = '';">Cancel</button>
     <button type="button" (click)="createAccount(email, password, firstName, lastName)">Create Account</button>
   </div>
@@ -26,3 +23,5 @@
 
 
 </div>
+<div *ngIf="activeUserId">
+  

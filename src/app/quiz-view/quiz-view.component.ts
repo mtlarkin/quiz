@@ -22,7 +22,6 @@ export class QuizViewComponent implements OnInit {
 
   currentQuestionIndex: number = 0;
   currentQuestionAnswers = [];
-  correctCount: number = 0;
   currentQuestion;
   answerArray: Array<QuizQuestion> = [];
 
@@ -37,7 +36,7 @@ export class QuizViewComponent implements OnInit {
   ngOnInit() {
     console.log(this.userKey);
     if (this.userKey) {
-      this.quizService.getCurrentUserQuizList().subscribe(list => {
+      this.quizService.getCurrentUserQuizList(this.userKey).subscribe(list => {
         return this.allUserQuizzes = list;
       });
       console.log(this.allUserQuizzes);
@@ -57,24 +56,20 @@ export class QuizViewComponent implements OnInit {
 
     var result = new QuizQuestion(this.questionObjectArray[this.currentQuestionIndex].$key, answer, correct);
 
-    if (this.answerArray.length === this.questionObjectArray.length) {
-      console.log("submitting data")
+    if (this.currentQuestionIndex + 1 === this.questionObjectArray.length) {
+      // this.answerArray.push(result);
+      console.log("below:");
+      console.log(this.currentQuestion);
+      console.log("submitting data");
       this.quizService.updateQuestionAnswerAndScore(this.currentQuizKey, this.answerArray);
+      console.log(this.currentQuestionIndex);
       this.currentQuestionIndex++;
-      this.startQuiz();
+      this.endQuiz();
     } else {
 
       this.answerArray.push(result);
-      console.log("answerArray: " + this.answerArray.length);
-      console.log(this.answerArray)
-
-      console.log("questionObjectArray: " + this.questionObjectArray.length);
-      console.log(this.questionObjectArray)
-
-      console.log("before      addition: " + this.currentQuestionIndex);
+      console.log(this.currentQuestionIndex);
       this.currentQuestionIndex++;
-
-      console.log("after addition: " + this.currentQuestionIndex);
       this.currentQuestionAnswers = new Array(0);
 
       this.startQuiz();
@@ -84,33 +79,38 @@ export class QuizViewComponent implements OnInit {
 
   }
 
+  endQuiz() {
+   this.selectedQuiz = undefined;
+   this.questionObjectArray = [];
+
+   this.currentQuestionIndex = 0;
+   this.currentQuestionAnswers = [];
+   this.currentQuestion = undefined;
+   this.answerArray = [];
+   return;
+  }
+
   startQuiz() {
-    if (this.questionObjectArray[this.currentQuestionIndex]) {
 
-      this.currentQuestion = this.questionObjectArray[this.currentQuestionIndex];
-      console.log("currentQuestionIndex: " + this.currentQuestionIndex);
-      console.log(this.currentQuestion);
-      console.log(this.questionObjectArray)
+    this.currentQuestion = this.questionObjectArray[this.currentQuestionIndex];
 
-      this.currentQuestionAnswers.push(this.currentQuestion.correct);
-      this.currentQuestionAnswers.push(this.currentQuestion.wrong1);
-      this.currentQuestionAnswers.push(this.currentQuestion.wrong2);
-      this.currentQuestionAnswers.push(this.currentQuestion.wrong3);
+    this.currentQuestionAnswers.push(this.currentQuestion.correct);
+    this.currentQuestionAnswers.push(this.currentQuestion.wrong1);
+    this.currentQuestionAnswers.push(this.currentQuestion.wrong2);
+    this.currentQuestionAnswers.push(this.currentQuestion.wrong3);
 
-      var temp = new Array(0, 1, 2, 3);
-      var shuffledAnswers = [];
+    var temp = new Array(0, 1, 2, 3);
+    var shuffledAnswers = [];
 
-      var shuffledOrder = this.quizService.shuffle(temp);
+    var shuffledOrder = this.quizService.shuffle(temp);
 
-      for (var i = 0; i < shuffledOrder.length; i++) {
-        var position = shuffledOrder[i];
-        shuffledAnswers.push(this.currentQuestionAnswers[position])
-      }
-      return this.currentQuestionAnswers = shuffledAnswers;
-
-    } else {
-      console.log("nice");
+    for (var i = 0; i < shuffledOrder.length; i++) {
+      var position = shuffledOrder[i];
+      shuffledAnswers.push(this.currentQuestionAnswers[position])
     }
+    return this.currentQuestionAnswers = shuffledAnswers;
+
+
   }
 
   test() {

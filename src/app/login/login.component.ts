@@ -12,25 +12,26 @@ import { QuizService } from '../quiz.service';
 export class LoginComponent implements OnInit {
 
   userRetrieved = new EventEmitter();
-
+  currentUser: Object;
   activeUserId: string;
-  uid;
   constructor(public userService: UserService, public quizService: QuizService) { }
 
   ngOnInit() {
-
+    
   }
 
-  signIn(email, password){
+  signIn(email, password) {
+    this.userService.logOut();
     this.userService.logIn(email, password);
-    setTimeout(()=> {
+    this.currentUser = this.userService.getUserById();
+
       this.getUser();
-      setTimeout(()=>{
       
-        console.log("sign in:  "+this.activeUserId);
-        this.userRetrieved.emit(this.activeUserId);
-      },700)
-    }, 300);
+
+
+      console.log("sign in:  " + this.activeUserId);
+      this.userRetrieved.emit(this.activeUserId);
+
   }
 
   log() {
@@ -38,23 +39,21 @@ export class LoginComponent implements OnInit {
   }
 
   createAccount(email, password, firstName, lastName) {
+    this.userService.logOut();
     var user = this.userService.newAccount(email, password, firstName, lastName);
-    user.then( usr => {
-      return this.uid = usr.uid;
-    })
-    setTimeout(()=>{
-      this.getUser();
+    this.getUser();
 
-    }, 500);
+    this.currentUser = this.userService.getUserById();
     setTimeout(x => {
 
-      this.quizService.generateQuizzes(this.uid);
-    },1000);
+      this.quizService.generateQuizzes(this.activeUserId);
+    }, 1000);
   }
 
   getUser() {
-   return this.activeUserId = this.userService.getCurrentUser()
+    return this.activeUserId = this.userService.getCurrentUser();
   }
+  
 
 
 

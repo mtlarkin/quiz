@@ -3,10 +3,12 @@
 </div>
 
 <div class="" *ngIf="selectedQuiz">
-  <button type="button" name="button" (click)="startQuiz()">START QUIZ</button>
+  <button class="btn btn-success" type="button" name="button" (click)="startQuiz()">Begin!</button>
+  <h4>{{currentQuestion.topic}}</h4>
+  <h2>{{currentQuestion.question}}</h2>
+  <div class="form-group" *ngFor="let answer of currentQuestionAnswers">
 
-  <div class="" *ngFor="let answer of currentQuestionAnswers">
-    <button (click)="submitAnswer(answer)">{{answer}}</button>
+    <button class="form-control" (click)="submitAnswer(answer)">{{answer}}</button>
 
   </div>
 </div>
