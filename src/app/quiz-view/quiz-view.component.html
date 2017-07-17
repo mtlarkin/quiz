@@ -1,12 +1,12 @@
-
 <div class="" *ngIf="!selectedQuiz">
-  <h1 (click)="test()">HELLO</h1>
-  <p *ngFor="let quiz of allUserQuizzes" (click)="selectQuiz(quiz.$key)">{{quiz.$key}}</p>
-
+  <button *ngFor="let quiz of allUserQuizzes" (click)="selectQuiz(quiz.$key)">{{quiz.$key}}</button>
 </div>
+
 <div class="" *ngIf="selectedQuiz">
-  <button type="button" name="button" (click)="startQuiz()">TEST ME</button>
+  <button type="button" name="button" (click)="startQuiz()">START QUIZ</button>
+
   <div class="" *ngFor="let answer of currentQuestionAnswers">
-    {{answer}}
+    <button (click)="submitAnswer(answer)">{{answer}}</button>
+
   </div>
 </div>

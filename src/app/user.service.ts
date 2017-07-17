@@ -20,9 +20,9 @@ export class UserService {
     this.userTable = firebase.database().ref('users');
   }
 
-  newAccount(email, password, firstName, lastName){
-    var user:(firebase.Promise<any>|firebase.Thenable<any>) = this.auth.createUserWithEmailAndPassword(email, password);
-    setTimeout(()=>{
+  newAccount(email, password, firstName, lastName) {
+    var user: (firebase.Promise<any> | firebase.Thenable<any>) = this.auth.createUserWithEmailAndPassword(email, password);
+    setTimeout(() => {
 
       user.then(u => {
         var newUser = new User(firstName, lastName);
@@ -33,7 +33,7 @@ export class UserService {
   }
 
   deleteUser() {
-    if (confirm("Are you sure you want to delete your account?")){
+    if (confirm("Are you sure you want to delete your account?")) {
       this.auth.currentUser.delete();
       this.listOfUsers.remove(this.auth.currentUser.uid);
     } else {
@@ -41,11 +41,11 @@ export class UserService {
     }
   }
 
-  logOut(){
+  logOut() {
     this.auth.signOut();
   }
 
-  logIn(email, password){
+  logIn(email, password) {
     this.auth.signInWithEmailAndPassword(email, password);
   }
 
@@ -53,11 +53,11 @@ export class UserService {
     return this.listOfUsers;
   }
 
-  getCurrentUser(){
-    return this.db.object('users/' + this.auth.currentUser.uid);
+  getCurrentUser() {
+    return this.auth.currentUser.uid;
   }
 
-  
+
 
 
 

@@ -11,9 +11,9 @@ import { QuizService } from '../quiz.service';
 })
 export class LoginComponent implements OnInit {
 
-  userRetrieved = new EventEmitter<object>();
+  userRetrieved = new EventEmitter();
 
-  activeUser;
+  activeUserId: string;
   uid;
   constructor(public userService: UserService, public quizService: QuizService) { }
 
@@ -25,6 +25,11 @@ export class LoginComponent implements OnInit {
     this.userService.logIn(email, password);
     setTimeout(()=> {
       this.getUser();
+      setTimeout(()=>{
+      
+        console.log("sign in:  "+this.activeUserId);
+        this.userRetrieved.emit(this.activeUserId);
+      },700)
     }, 300);
   }
 
@@ -43,17 +48,12 @@ export class LoginComponent implements OnInit {
     }, 500);
     setTimeout(x => {
 
-      console.log('login = ' + this.activeUser);
       this.quizService.generateQuizzes(this.uid);
     },1000);
   }
 
   getUser() {
-    this.userService.getCurrentUser().subscribe( user => {
-      this.userRetrieved.emit(user);
-      console.log('Get user '+ user);
-      return this.activeUser = user;
-    });
+   return this.activeUserId = this.userService.getCurrentUser()
   }
 
 
